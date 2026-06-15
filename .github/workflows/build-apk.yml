@@ -68,8 +68,23 @@ jobs:
         env:
           ANDROID_SDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}
 
-      - name: 上传 APK
+      - name: 上传 APK (Artifact)
         uses: actions/upload-artifact@v4
         with:
           name: 贪吃蛇-APK
           path: android/app/build/outputs/apk/release/app-release.apk
+
+      - name: 复制 APK 用于发布
+        run: |
+          cp android/app/build/outputs/apk/release/app-release.apk snake-game.apk
+
+      - name: 发布到 GitHub Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ github.run_number }}
+          name: "贪吃蛇 v${{ github.run_number }}"
+          files: snake-game.apk
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
