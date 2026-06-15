@@ -71,18 +71,21 @@
     </div>
 
     <!-- 在线试玩 -->
-    <a class="btn-secondary" href="game.html?v=2">在浏览器中直接玩 →</a>
+    <a class="btn-secondary" id="playLink" href="game.html">在浏览器中直接玩 →</a>
 </div>
 
 <script>
 (function(){
     const isAndroid = /android/i.test(navigator.userAgent);
     const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    // 强制刷新链接：每次打开都带不同时间戳
+    const ts = Date.now();
+    document.getElementById('playLink').href = 'game.html?t=' + ts;
+
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
 
-    // 已安装的 PWA 直接进游戏
     if (isStandalone || window.location.search.includes('app=true')) {
-        window.location.href = 'game.html?v=2';
+        window.location.href = 'game.html?t=' + ts;
         return;
     }
 
