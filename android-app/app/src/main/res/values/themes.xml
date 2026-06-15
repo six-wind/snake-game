@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 启动画面主题 -->
+    <style name="Theme.Splash" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_bg</item>
+        <item name="android:statusBarColor">#0f0f23</item>
+        <item name="android:navigationBarColor">#0f0f23</item>
+    </style>
+
+    <!-- 主界面主题 -->
+    <style name="Theme.SnakeGame" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">#0f0f23</item>
+        <item name="android:statusBarColor">#0f0f23</item>
+        <item name="android:navigationBarColor">#0f0f23</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+</resources>

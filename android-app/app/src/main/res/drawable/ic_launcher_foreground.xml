@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- 蛇身 - S 形曲线 -->
+    <path
+        android:fillColor="#00d48c"
+        android:pathData="M30,60 Q35,30 54,40 Q70,48 65,65 Q60,78 50,74 Q44,72 46,66 Q48,60 54,60" />
+
+    <!-- 蛇头 -->
+    <circle
+        android:fillColor="#00d48c"
+        android:cx="54"
+        android:cy="60"
+        android:radius="7" />
+
+    <!-- 眼睛 -->
+    <circle
+        android:fillColor="#ffffff"
+        android:cx="52"
+        android:cy="57"
+        android:radius="2.5" />
+    <circle
+        android:fillColor="#000000"
+        android:cx="52.5"
+        android:cy="56.5"
+        android:radius="1.2" />
+
+    <!-- 食物 -->
+    <circle
+        android:fillColor="#e94560"
+        android:cx="38"
+        android:cy="38"
+        android:radius="4" />
+
+    <!-- 食物光晕 -->
+    <circle
+        android:fillColor="#80e94560"
+        android:cx="38"
+        android:cy="38"
+        android:radius="7" />
+
+</vector>

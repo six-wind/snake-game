@@ -1,0 +1,16 @@
+# 禁止提交生成文件
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+bin/
+gen/
+out/
+.gradle/
+build/
+local.properties
+*.iml
+.idea/
+*.keystore
+!gradle/wrapper/gradle-wrapper.jar
