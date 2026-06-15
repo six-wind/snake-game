@@ -2,101 +2,90 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover, maximum-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="贪吃蛇">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#0f0f23">
-    <title>贪吃蛇 - 下载</title>
+    <title>🐍 贪吃蛇</title>
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
-        html, body { width:100%; height:100%; background: #0f0f23; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { display:flex; justify-content:center; align-items:center; min-height:100vh; min-height:100dvh; padding:20px; }
-        .page { width:100%; max-width:420px; text-align:center; }
-        .app-icon { font-size:100px; display:block; margin-bottom:16px; animation: float 3s ease-in-out infinite; }
-        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-        .app-name { color:#fff; font-size:32px; font-weight:900; margin-bottom:6px; }
-        .app-desc { color:#888; font-size:15px; margin-bottom:32px; }
-        .features { display:flex; gap:12px; margin-bottom:36px; flex-wrap:wrap; justify-content:center; }
-        .feature { background:#16213e; border:1px solid #0f3460; border-radius:12px; padding:10px 16px; color:#a0a0b8; font-size:13px; white-space:nowrap; }
-        .btn-primary {
-            display:block; width:100%; padding:18px; background:linear-gradient(135deg, #e94560, #c0392b);
-            color:#fff; border:none; border-radius:16px; font-size:20px; font-weight:700;
-            cursor:pointer; text-decoration:none; letter-spacing:1px;
-            box-shadow:0 8px 32px rgba(233,69,96,0.35); transition:all 0.15s; margin-bottom:12px;
-        }
-        .btn-primary:active { transform:scale(0.96); box-shadow:0 4px 16px rgba(233,69,96,0.25); }
-        .btn-secondary {
-            display:block; width:100%; padding:14px; background:rgba(255,255,255,0.06);
-            color:#888; border:1px solid rgba(255,255,255,0.1); border-radius:14px;
-            font-size:15px; cursor:pointer; text-decoration:none; transition:all 0.15s;
-        }
-        .btn-secondary:active { background:rgba(255,255,255,0.12); }
-        .ios-steps { background:#16213e; border-radius:16px; padding:20px; margin-bottom:12px; text-align:left; color:#ccc; font-size:14px; line-height:2; }
-        .ios-steps .step-num { display:inline-block; width:22px; height:22px; background:#e94560; color:#fff; border-radius:50%; text-align:center; line-height:22px; font-size:12px; margin-right:8px; }
-        .divider { color:#333; margin:20px 0; font-size:12px; }
+        html, body { width:100%; height:100%; overflow:hidden; background:#0f0f23; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none; touch-action:none; }
+        body { display:flex; justify-content:center; align-items:center; }
+        .game-wrapper { display:flex; flex-direction:column; align-items:center; gap:10px; width:100%; max-width:500px; height:100vh; height:100dvh; padding:12px; justify-content:center; }
+        .header { display:flex; justify-content:space-between; align-items:center; width:100%; padding:0 4px; gap:10px; }
+        .score-box, .best-box { flex:1; background:#16213e; border:2px solid #0f3460; border-radius:16px; padding:10px 16px; text-align:center; }
+        .score-label, .best-label { color:#a0a0b8; font-size:11px; text-transform:uppercase; letter-spacing:1px; }
+        .score-value { color:#e94560; font-size:32px; font-weight:900; }
+        .best-value { color:#f5c518; font-size:32px; font-weight:900; }
+        .canvas-container { position:relative; width:100%; aspect-ratio:1/1; max-width:480px; border:3px solid #0f3460; border-radius:20px; overflow:hidden; background:#1a1a2e; box-shadow:0 0 60px rgba(233,69,96,0.12), inset 0 0 60px rgba(0,0,0,0.25); }
+        canvas { display:block; width:100%; height:100%; }
+        .overlay { position:absolute; top:0; left:0; width:100%; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; background:rgba(15,15,35,0.88); z-index:10; transition:opacity 0.3s; backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); }
+        .overlay.hidden { opacity:0; pointer-events:none; }
+        .overlay-title { color:#e94560; font-size:40px; font-weight:900; margin-bottom:6px; text-shadow:0 0 30px rgba(233,69,96,0.5); }
+        .overlay-score { color:#f5c518; font-size:56px; font-weight:900; margin-bottom:2px; }
+        .overlay-subtitle { color:#a0a0b8; font-size:15px; margin-bottom:28px; }
+        .btn { background:#e94560; color:#fff; border:none; border-radius:30px; padding:16px 48px; font-size:20px; font-weight:700; cursor:pointer; letter-spacing:1px; transition:all 0.15s; box-shadow:0 6px 24px rgba(233,69,96,0.4); }
+        .btn:active { transform:scale(0.94); box-shadow:0 3px 12px rgba(233,69,96,0.3); background:#d63850; }
+        @media (max-width:400px) { .game-wrapper { padding:8px; gap:8px; } .score-box, .best-box { padding:8px 12px; border-radius:12px; } .score-value, .best-value { font-size:24px; } .btn { padding:14px 36px; font-size:18px; } .overlay-title { font-size:30px; } .overlay-score { font-size:42px; } }
     </style>
 </head>
 <body>
-<div class="page" id="page">
-    <span class="app-icon">🐍</span>
-    <div class="app-name">贪吃蛇</div>
-    <div class="app-desc">经典休闲小游戏</div>
-    <div class="features">
-        <span class="feature">🎮 滑动操控</span>
-        <span class="feature">⚡ 逐渐加速</span>
-        <span class="feature">📡 离线可玩</span>
-        <span class="feature">📱 全屏沉浸</span>
+<div class="game-wrapper">
+    <div class="header">
+        <div class="score-box"><div class="score-label">分数</div><div class="score-value" id="score">0</div></div>
+        <div class="best-box"><div class="best-label">最高分</div><div class="best-value" id="best">0</div></div>
     </div>
-
-    <!-- 安卓下载按钮 -->
-    <a class="btn-primary" id="androidBtn" href="https://github.com/six-wind/snake-game/releases/latest/download/snake-game.apk" style="display:none;">
-        📥 下载安装 (Android)
-    </a>
-
-    <!-- iOS 说明 -->
-    <div class="ios-steps" id="iosSteps" style="display:none;">
-        <div style="color:#e94560;font-weight:700;margin-bottom:8px;">📲 iPhone 安装方法</div>
-        <div><span class="step-num">1</span> 点浏览器底部 <b>分享</b> 按钮</div>
-        <div><span class="step-num">2</span> 往下滑找到 <b>「添加到主屏幕」</b></div>
-        <div><span class="step-num">3</span> 点右上角 <b>「添加」</b></div>
-        <div style="color:#888;margin-top:8px;font-size:12px;">桌面出现 🐍 图标后，就像普通 App 一样啦</div>
+    <div class="canvas-container" id="canvasContainer">
+        <canvas id="gameCanvas"></canvas>
+        <div class="overlay" id="startOverlay">
+            <div class="overlay-title">🐍 贪吃蛇</div>
+            <div class="overlay-subtitle">滑动屏幕或按方向键开始</div>
+            <button class="btn" id="startBtn">开始游戏</button>
+        </div>
+        <div class="overlay hidden" id="gameOverOverlay">
+            <div class="overlay-title">游戏结束</div>
+            <div class="overlay-score" id="finalScore">0</div>
+            <div class="overlay-subtitle">分</div>
+            <button class="btn" id="restartBtn">再来一局</button>
+        </div>
     </div>
-
-    <!-- 电脑端 -->
-    <div id="pcInfo" style="display:none; color:#888; font-size:14px; margin-bottom:12px;">
-        💻 在手机上打开此链接即可下载安装
-    </div>
-
-    <!-- 在线试玩 -->
-    <a class="btn-secondary" id="playLink" href="game.html">在浏览器中直接玩 →</a>
 </div>
-
 <script>
 (function(){
-    const isAndroid = /android/i.test(navigator.userAgent);
-    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-    // 强制刷新链接：每次打开都带不同时间戳
-    const ts = Date.now();
-    document.getElementById('playLink').href = 'game.html?t=' + ts;
-
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
-
-    if (isStandalone || window.location.search.includes('app=true')) {
-        window.location.href = 'game.html?t=' + ts;
-        return;
-    }
-
-    // 显示对应的下载引导
-    if (isAndroid) {
-        document.getElementById('androidBtn').style.display = 'block';
-    } else if (isIOS) {
-        document.getElementById('iosSteps').style.display = 'block';
-    } else {
-        document.getElementById('pcInfo').style.display = 'block';
-    }
+const canvas=document.getElementById('gameCanvas'),ctx=canvas.getContext('2d');
+const scoreEl=document.getElementById('score'),bestEl=document.getElementById('best'),finalScoreEl=document.getElementById('finalScore');
+const startOverlay=document.getElementById('startOverlay'),gameOverOverlay=document.getElementById('gameOverOverlay');
+const startBtn=document.getElementById('startBtn'),restartBtn=document.getElementById('restartBtn');
+const canvasContainer=document.getElementById('canvasContainer');
+const GRID=20,INITIAL_SPEED=120,SPEED_INC=2,MIN_SPEED=50;
+let snake,food,direction,nextDirection,score,bestScore,gameLoop,speed,isRunning,particles;const AC=new(window.AudioContext||window.webkitAudioContext)();function sfx(t,f,d,v=0.15){try{if(AC.state==='suspended')AC.resume();const o=AC.createOscillator(),g=AC.createGain();o.type=t;o.frequency.setValueAtTime(f,AC.currentTime);o.frequency.exponentialRampToValueAtTime(f*.3,AC.currentTime+d);g.gain.setValueAtTime(v,AC.currentTime);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+d);o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+d)}catch(e){}}function sfxEat(){sfx('sine',880,.1,.15);setTimeout(()=>sfx('sine',1320,.08,.12),60)}function sfxDie(){sfx('sawtooth',50,.4,.25)}
+function loadBest(){try{bestScore=parseInt(localStorage.getItem('snake-best'))||0}catch(e){bestScore=0}bestEl.textContent=bestScore}
+function saveBest(){if(score>bestScore){bestScore=score;bestEl.textContent=bestScore;try{localStorage.setItem('snake-best',bestScore)}catch(e){}}}
+function resizeCanvas(){const sz=Math.min(canvasContainer.clientWidth,canvasContainer.clientHeight);const dpr=Math.min(window.devicePixelRatio||1,2);const res=Math.floor(sz*dpr);canvas.width=res;canvas.height=res;canvas.style.width=sz+'px';canvas.style.height=sz+'px'}
+function resetGame(){const sx=Math.floor(GRID/4),sy=Math.floor(GRID/2);snake=[{x:sx,y:sy},{x:sx-1,y:sy},{x:sx-2,y:sy}];direction={x:1,y:0};nextDirection={x:1,y:0};score=0;speed=INITIAL_SPEED;particles=[];scoreEl.textContent='0';spawnFood()}
+function spawnFood(){const occ=new Set(snake.map(s=>s.x+','+s.y));const avail=[];for(let x=0;x<GRID;x++)for(let y=0;y<GRID;y++)if(!occ.has(x+','+y))avail.push({x,y});if(avail.length===0)return;food=avail[Math.floor(Math.random()*avail.length)]}
+function update(){direction={...nextDirection};const h=snake[0];const nh={x:h.x+direction.x,y:h.y+direction.y};if(nh.x<0||nh.x>=GRID||nh.y<0||nh.y>=GRID){gameOver();return}for(const s of snake)if(s.x===nh.x&&s.y===nh.y){gameOver();return}snake.unshift(nh);if(nh.x===food.x&&nh.y===food.y){score+=10;sfxEat();scoreEl.textContent=score;speed=Math.max(MIN_SPEED,speed-SPEED_INC);spawnParticles(food.x,food.y);spawnFood();clearInterval(gameLoop);gameLoop=setInterval(gameTick,speed)}else{snake.pop()}}
+function spawnParticles(gx,gy){for(let i=0;i<12;i++)particles.push({x:gx+0.5,y:gy+0.5,vx:(Math.random()-0.5)*3,vy:(Math.random()-0.5)*3,life:1,decay:0.025+Math.random()*0.04})}
+function updateParticles(){for(let i=particles.length-1;i>=0;i--){const p=particles[i];p.x+=p.vx*0.4;p.y+=p.vy*0.4;p.life-=p.decay;if(p.life<=0)particles.splice(i,1)}}
+function gameOver(){isRunning=false;clearInterval(gameLoop);gameLoop=null;saveBest();sfxDie();finalScoreEl.textContent=score;gameOverOverlay.classList.remove('hidden')}
+function gameTick(){update();if(isRunning){updateParticles();draw()}}
+function draw(){const w=canvas.width,h=canvas.height,s=w/GRID;ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle='#1a1a2e';ctx.fillRect(0,0,w,h);ctx.strokeStyle='rgba(15,52,96,0.2)';ctx.lineWidth=0.5;ctx.beginPath();for(let i=0;i<=GRID;i++){ctx.moveTo(i*s,0);ctx.lineTo(i*s,h);ctx.moveTo(0,i*s);ctx.lineTo(w,i*s)}ctx.stroke();ctx.setTransform(s,0,0,s,0,0);for(const p of particles){ctx.fillStyle='rgba(233,69,96,'+p.life+')';ctx.beginPath();ctx.arc(p.x,p.y,0.35*p.life,0,Math.PI*2);ctx.fill()}if(food){const fx=food.x+0.5,fy=food.y+0.5;const glow=ctx.createRadialGradient(fx,fy,0.05,fx,fy,0.9);glow.addColorStop(0,'rgba(233,69,96,0.7)');glow.addColorStop(0.5,'rgba(233,69,96,0.2)');glow.addColorStop(1,'rgba(233,69,96,0)');ctx.fillStyle=glow;ctx.fillRect(food.x-0.6,food.y-0.6,1.2,1.2);const pulse=1+0.1*Math.sin(Date.now()/200);ctx.fillStyle='#e94560';ctx.beginPath();ctx.arc(fx,fy,0.42*pulse,0,Math.PI*2);ctx.fill();ctx.fillStyle='rgba(255,255,255,0.45)';ctx.beginPath();ctx.arc(fx-0.13,fy-0.13,0.14,0,Math.PI*2);ctx.fill()}for(let i=snake.length-1;i>=0;i--){const seg=snake[i],sx=seg.x,sy=seg.y;const t=1-(i/Math.max(snake.length,1))*0.45;if(i===0){ctx.fillStyle='hsl(160,85%,'+48*t+'%)';roundRect(sx+0.06,sy+0.06,0.88,0.88,0.18);const eox=direction.x*0.16,eoy=direction.y*0.16;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(sx+0.32-eox,sy+0.28-eoy,0.14,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(sx+0.68-eox,sy+0.28-eoy,0.14,0,Math.PI*2);ctx.fill();ctx.fillStyle='#111';ctx.beginPath();ctx.arc(sx+0.36-eox,sy+0.27-eoy,0.07,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(sx+0.72-eox,sy+0.27-eoy,0.07,0,Math.PI*2);ctx.fill()}else{ctx.fillStyle='hsl(160,75%,'+38*t+'%)';roundRect(sx+0.12,sy+0.12,0.76,0.76,0.14)}}}
+function roundRect(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();ctx.fill()}
+function setDirection(dx,dy){if(dx===-direction.x&&dy===-direction.y&&snake.length>1)return;if(dx===direction.x&&dy===direction.y)return;nextDirection={x:dx,y:dy}}
+function startGame(){AC.resume();resizeCanvas();resetGame();isRunning=true;startOverlay.classList.add('hidden');gameOverOverlay.classList.add('hidden');clearInterval(gameLoop);gameLoop=setInterval(gameTick,speed);draw()}
+document.addEventListener('keydown',e=>{if(!isRunning){if(['Enter',' ','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();startGame()}return}switch(e.key){case'ArrowUp':case'w':case'W':e.preventDefault();setDirection(0,-1);break;case'ArrowDown':case's':case'S':e.preventDefault();setDirection(0,1);break;case'ArrowLeft':case'a':case'A':e.preventDefault();setDirection(-1,0);break;case'ArrowRight':case'd':case'D':e.preventDefault();setDirection(1,0);break}});
+let tsX,tsY,tsT;canvasContainer.addEventListener('touchstart',e=>{if(e.target.tagName==='BUTTON')return;e.preventDefault();const t=e.touches[0];tsX=t.clientX;tsY=t.clientY;tsT=Date.now();if(!isRunning)startGame()},{passive:false});canvasContainer.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});canvasContainer.addEventListener('touchend',e=>{if(!isRunning)return;const t=e.changedTouches[0];const dx=t.clientX-tsX,dy=t.clientY-tsY,dt=Date.now()-tsT;const dist=Math.sqrt(dx*dx+dy*dy);if(dist<20||dt>500)return;if(Math.abs(dx)>Math.abs(dy))setDirection(dx>0?1:-1,0);else setDirection(0,dy>0?1:-1)});
+startBtn.addEventListener('click',startGame);restartBtn.addEventListener('click',startGame);startOverlay.addEventListener('click',e=>{if(e.target===startOverlay)startGame()});gameOverOverlay.addEventListener('click',e=>{if(e.target===gameOverOverlay)startGame()});
+function init(){loadBest();resizeCanvas();draw();startOverlay.classList.remove('hidden');gameOverOverlay.classList.add('hidden')}
+window.addEventListener('resize',()=>{resizeCanvas();if(!isRunning)draw()});init();
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
 })();
 </script>
 </body>
