@@ -42,12 +42,12 @@ jobs:
 
       - name: 初始化 TWA 项目
         run: |
-          # 用 yes 管道跳过交互式问题
-          yes | bubblewrap init \
+          # 回答 n (不用bubblewrap安装JDK，用系统的)
+          printf "n\n" | bubblewrap init \
             --manifest https://six-wind.github.io/snake-game/manifest.json \
-            --directory twa-project 2>&1 | tail -5
+            --directory twa-project 2>&1 | tail -10
         env:
-          CI: true
+          JAVA_HOME: ${{ env.JAVA_HOME }}
 
       - name: 构建 APK
         run: |
