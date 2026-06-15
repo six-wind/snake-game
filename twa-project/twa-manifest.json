@@ -1,0 +1,24 @@
+{
+  "packageId": "com.snake.game",
+  "host": "six-wind.github.io",
+  "name": "贪吃蛇",
+  "launcherName": "贪吃蛇",
+  "display": "standalone",
+  "themeColor": "#0f0f23",
+  "navigationColor": "#000000",
+  "backgroundColor": "#0f0f23",
+  "startUrl": "/snake-game?app=true",
+  "iconUrl": "https://six-wind.github.io/snake-game/icons/icon-512.png",
+  "maskableIconUrl": "https://six-wind.github.io/snake-game/icons/icon-512.png",
+  "monochromeIconUrl": "https://six-wind.github.io/snake-game/icons/icon-192.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKeyInfo": {
+    "path": "./android.keystore",
+    "alias": "android"
+  },
+  "appVersionName": "1.0",
+  "appVersionCode": 1,
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://six-wind.github.io/snake-game/manifest.json"
+}

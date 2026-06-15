@@ -42,9 +42,12 @@ jobs:
 
       - name: 初始化 TWA 项目
         run: |
-          bubblewrap init \
+          # 用 yes 管道跳过交互式问题
+          yes | bubblewrap init \
             --manifest https://six-wind.github.io/snake-game/manifest.json \
             --directory twa-project 2>&1 | tail -5
+        env:
+          CI: true
 
       - name: 构建 APK
         run: |
